@@ -2,37 +2,55 @@
   <h1>Vue メモ</h1>
   <div class="memo-list">
     <ul class="memo-list__container">
-      <li class="memo">
+      <li class="memo" v-for="(memo, index) in memos" :key="index">
         <div class="memo__checkbox">
           <input type="checkbox" />
         </div>
-        <div class="memo__text">ひき肉を300g買う</div>
-        <button class="memo__delete">削除</button>
-      </li>
-      <li class="memo">
-        <div class="memo__checkbox">
-          <input type="checkbox" />
-        </div>
-        <div class="memo__text">ホウレンソウを1束買う</div>
-        <button class="memo__delete">削除</button>
-      </li>
-      <li class="memo">
-        <div class="memo__checkbox">
-          <input type="checkbox" />
-        </div>
-        <div class="memo__text">ピーマンを2個買う</div>
-        <button class="memo__delete">削除</button>
+        <div class="memo__text">{{ memo.memo }}</div>
+        <button class="memo__delete" v-on:click="deleteButton(index)">
+          削除
+        </button>
       </li>
     </ul>
-    <div class="add-memo-field">
-      <input class="add-memo-field__input" type="text" />
-      <button class="add-memo-field__button">追加</button>
-    </div>
+  </div>
+  <div class="add-memo-field">
+    <input class="add-memo-field__input" type="text" v-model="content" />
+    <button class="add-memo-field__button" v-on:click="addButton">追加</button>
   </div>
 </template>
 
 <script>
-export default {}
+// import { functionExpression } from "@babel/types"
+
+export default {
+  data() {
+    return {
+      memos: [],
+    }
+  },
+  mounted() {
+    if (localStorage.memos) {
+      this.memos = JSON.parse(localStorage.memos)
+    }
+  },
+  methods: {
+    addButton: function () {
+      if (this.content !== "") {
+        const newMemo = {
+          memo: this.content,
+        }
+        this.memos.push(newMemo)
+        localStorage.memos = JSON.stringify(this.memos)
+        this.content = ""
+        console.log(localStorage.memos)
+      }
+    },
+    deleteButton: function (index) {
+      this.memos.splice(index, 1)
+      localStorage.memos = JSON.stringify(this.memos)
+    },
+  },
+}
 </script>
 
 <style scoped>
