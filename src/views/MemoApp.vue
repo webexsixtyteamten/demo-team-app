@@ -2,52 +2,62 @@
   <h1>Vue メモ</h1>
   <div class="memo-list">
     <ul class="memo-list__container">
-      <li class="memo" v-for="(memo, index) in memos" :key="index">
+      <li v-for="(memo, i) in memos" v-bind:key="i" class="memo">
         <div class="memo__checkbox">
-          <input type="checkbox" />
+          <input type="checkbox" v-model="memo.check" />
         </div>
-        <div class="memo__text">{{ memo.memo }}</div>
-        <button class="memo__delete" v-on:click="deleteButton(index)">
-          削除
-        </button>
+        <div v-if="memo.check" class="memo__text memo__text--done">
+          {{ i }}:{{ memo.text }}
+        </div>
+        <div v-else class="memo__text">{{ i }}:{{ memo.text }}</div>
+        <button v-on:click="deletememo(i)" class="memo__delete">削除</button>
       </li>
     </ul>
-  </div>
-  <div class="add-memo-field">
-    <input class="add-memo-field__input" type="text" v-model="content" />
-    <button class="add-memo-field__button" v-on:click="addButton">追加</button>
+    <div class="add-memo-field">
+      <input
+        class="add-memo-field__input"
+        type="text"
+        placeholder="ここにメモを入力"
+        v-model="content"
+      />
+      <button class="add-memo-field__button" v-on:click="add">追加</button>
+    </div>
   </div>
 </template>
 
 <script>
-// import { functionExpression } from "@babel/types"
-
 export default {
   data() {
     return {
-      memos: [],
-    }
-  },
-  mounted() {
-    if (localStorage.memos) {
-      this.memos = JSON.parse(localStorage.memos)
+      content: "",
+      memos: [
+        {
+          text: "ひき肉を300g買う",
+          check: false,
+        },
+        {
+          text: "ピーマンを2個買う",
+          check: false,
+        },
+        {
+          text: "ホウレンソウを1束買う",
+          check: false,
+        },
+      ],
     }
   },
   methods: {
-    addButton: function () {
-      if (this.content !== "") {
-        const newMemo = {
-          memo: this.content,
-        }
-        this.memos.push(newMemo)
-        localStorage.memos = JSON.stringify(this.memos)
+    add() {
+      if (this.content != "") {
+        this.memos.push({
+          text: this.content,
+          check: false,
+        })
         this.content = ""
-        console.log(localStorage.memos)
       }
     },
-    deleteButton: function (index) {
-      this.memos.splice(index, 1)
-      localStorage.memos = JSON.stringify(this.memos)
+    deletememo(i) {
+      this.memos.splice(i, 1)
     },
   },
 }
