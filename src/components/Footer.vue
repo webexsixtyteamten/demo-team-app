@@ -2,7 +2,9 @@
   <footer class="footer">
     <div>
       This Application is made by
-      <span class="names">Shunpei, Tadashi and Take</span>.
+      <span class="names"
+        >Koudai Takebayashi, Tada Haruki and Kojima Shumpei</span
+      >.
     </div>
     <small
       >The Application is created as a part of the GeekSalon WebExpert
